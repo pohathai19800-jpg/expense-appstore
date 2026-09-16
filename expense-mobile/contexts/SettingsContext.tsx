@@ -10,6 +10,7 @@ import type { ReactNode } from 'react';
 
 import { getDatabase, migrateDatabase } from '@/database';
 import { getSettingValue, setSetting } from '@/database/table/settings/queries';
+import { processDueBills } from '@/database/table/bills/queries';
 import { defaultLanguage, languages } from '@/i18n/config';
 import type { Language } from '@/i18n/config';
 import { getTranslations, translations } from '@/i18n';
@@ -34,6 +35,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     try {
       await getDatabase();
       await migrateDatabase();
+      await processDueBills();
 
       const stored = await getSettingValue(LANGUAGE_SETTING_KEY);
 

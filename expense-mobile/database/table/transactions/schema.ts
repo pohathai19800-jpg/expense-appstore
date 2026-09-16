@@ -11,6 +11,7 @@ export async function createTransactionsTable() {
       type TEXT NOT NULL CHECK (type IN ('income', 'expense')),
       amount REAL NOT NULL CHECK (amount > 0),
       note TEXT,
+      bill_id INTEGER,
       transaction_date TEXT NOT NULL,
       created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
       updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -21,6 +22,10 @@ export async function createTransactionsTable() {
 
       FOREIGN KEY (category_id)
         REFERENCES categories(id)
+        ON DELETE SET NULL
+
+      FOREIGN KEY (bill_id)
+        REFERENCES bills(id)
         ON DELETE SET NULL
     );
   `);

@@ -2,7 +2,7 @@ import {
   DarkTheme,
   DefaultTheme,
   ThemeProvider,
-} from '@react-navigation/native';
+} from 'expo-router/react-navigation';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
@@ -64,7 +64,14 @@ function RootNavigator() {
         options={{ presentation: 'modal', title: '' }}
       />
 
+      <Stack.Screen
+        name="bill-form"
+        options={{ presentation: 'modal', title: '' }}
+      />
+
       <Stack.Screen name="budgets" options={{ title: '' }} />
+
+      <Stack.Screen name="bills" options={{ title: '' }} />
 
       <Stack.Screen name="categories" options={{ title: '' }} />
 

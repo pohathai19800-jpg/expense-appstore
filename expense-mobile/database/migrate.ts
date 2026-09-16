@@ -8,6 +8,7 @@ import { createTransactionsTable } from '@/database/table/transactions/schema';
 import { createTransfersTable } from '@/database/table/transfers/schema';
 import { createSettingsTable } from '@/database/table/settings/schema';
 import { createBudgetsTable } from '@/database/table/budgets/schema';
+import { createBillsTable } from '@/database/table/bills/schema';
 
 const DATABASE_VERSION = 1;
 
@@ -61,6 +62,13 @@ async function ensureSchemaIntegrity() {
   // ตารางใหม่ที่เพิ่มเข้ามาทีหลัง ใช้ CREATE TABLE IF NOT EXISTS จึงเรียกซ้ำได้ทุกครั้งอย่างปลอดภัย
   // (ครอบคลุมทั้งเครื่องที่ติดตั้งแอปใหม่ และเครื่องที่เคยมีฐานข้อมูลเวอร์ชันก่อนหน้าอยู่แล้ว)
   await createBudgetsTable();
+  await createBillsTable();
+
+  await ensureColumn(
+    'transactions',
+    'bill_id',
+    'INTEGER REFERENCES bills(id) ON DELETE SET NULL'
+  );
 }
 
 export async function migrateDatabase(

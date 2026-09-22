@@ -11,10 +11,21 @@ export default function MoreScreen() {
   const menu: {
     icon: React.ComponentProps<typeof Ionicons>['name'];
     label: string;
-    route: '/settings' | '/categories' | '/budgets' | '/bills' | '/about';
+    route:
+      | '/settings'
+      | '/categories'
+      | '/budgets'
+      | '/bills'
+      | '/savings-goals'
+      | '/about';
   }[] = [
     { icon: 'pie-chart-outline', label: t.budget.title, route: '/budgets' },
     { icon: 'receipt-outline', label: t.bill.title, route: '/bills' },
+    {
+      icon: 'flag-outline',
+      label: t.savingsGoal.title,
+      route: '/savings-goals',
+    },
     { icon: 'settings-outline', label: t.more.settings, route: '/settings' },
     { icon: 'pricetags-outline', label: t.more.categories, route: '/categories' },
     { icon: 'information-circle-outline', label: t.more.about, route: '/about' },

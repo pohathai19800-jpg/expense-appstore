@@ -13,6 +13,7 @@ import {
   createBudgetPlansTable,
   createBudgetPlanItemsTable,
 } from '@/database/table/budgetPlans/schema';
+import { createSavingsGoalsTable } from '@/database/table/savingsGoals/schema';
 
 const DATABASE_VERSION = 1;
 
@@ -69,6 +70,7 @@ async function ensureSchemaIntegrity() {
   await createBudgetPlansTable();
   await createBudgetPlanItemsTable();
   await createBillsTable();
+  await createSavingsGoalsTable();
 
   await ensureColumn(
     'transactions',

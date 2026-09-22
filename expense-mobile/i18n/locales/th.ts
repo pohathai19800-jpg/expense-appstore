@@ -234,6 +234,28 @@ export const th = {
     scopeSeparator: '·',
   },
 
+  savingsGoal: {
+    title: 'เป้าหมายการออม',
+    addGoal: 'เพิ่มเป้าหมาย',
+    editGoal: 'แก้ไขเป้าหมาย',
+    name: 'ชื่อเป้าหมาย',
+    namePlaceholder: 'เช่น ออมซื้อรถ, กองทุนฉุกเฉิน',
+    nameRequired: 'กรุณากรอกชื่อเป้าหมาย',
+    targetAmount: 'ยอดเป้าหมาย',
+    targetAmountRequired: 'กรุณากรอกยอดเป้าหมายให้ถูกต้อง',
+    empty: 'ยังไม่มีเป้าหมายการออม',
+    emptySubtitle: 'เพิ่มเป้าหมายเพื่อเริ่มออมเงินไปให้ถึงฝัน',
+    deleteConfirm: 'ต้องการลบเป้าหมายนี้ใช่หรือไม่?',
+    goalReached: 'ถึงเป้าหมายแล้ว',
+    deposit: 'ฝากเงิน',
+    withdraw: 'ถอนเงิน',
+    depositTitle: 'ฝากเงินเข้าเป้าหมาย',
+    withdrawTitle: 'ถอนเงินออกจากเป้าหมาย',
+    amount: 'จำนวนเงิน',
+    amountRequired: 'กรุณากรอกจำนวนเงินให้ถูกต้อง',
+    insufficientAmount: 'ยอดที่ออมไว้ไม่พอสำหรับถอนจำนวนนี้',
+  },
+
   bill: {
     title: 'บิล/รายการประจำ',
     addBill: 'เพิ่มบิล',

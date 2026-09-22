@@ -74,6 +74,18 @@ function RootNavigator() {
         options={{ presentation: 'modal', title: '' }}
       />
 
+      <Stack.Screen
+        name="savings-goal-form"
+        options={{ presentation: 'modal', title: '' }}
+      />
+
+      <Stack.Screen
+        name="savings-goal-adjust"
+        options={{ presentation: 'modal', title: '' }}
+      />
+
+      <Stack.Screen name="savings-goals" options={{ title: '' }} />
+
       <Stack.Screen name="budgets" options={{ title: '' }} />
 
       <Stack.Screen name="bills" options={{ title: '' }} />

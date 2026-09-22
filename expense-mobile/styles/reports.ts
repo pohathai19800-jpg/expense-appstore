@@ -160,17 +160,12 @@ export const reportsStyles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 10,
+    marginBottom: 12,
   },
   editPlanButtonText: {
     fontSize: 12,
     fontWeight: '600',
     color: '#2563EB',
-  },
-  allocationTargetCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 16,
   },
   allocationTargetHeaderRow: {
     flexDirection: 'row',
@@ -178,8 +173,14 @@ export const reportsStyles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 8,
   },
+  allocationTargetCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 16,
+  },
   allocationTargetValue: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: '700',
     color: '#111827',
     marginBottom: 8,

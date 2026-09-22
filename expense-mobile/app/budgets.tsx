@@ -8,7 +8,10 @@ import { MonthYearPicker } from '@/components/common/MonthYearPicker';
 import { BudgetCard } from '@/components/budgets/BudgetCard';
 import { budgetStyles } from '@/styles/budgets';
 
-import { getBudgetsWithSpent } from '@/database/table/budgets/queries';
+import {
+  getBudgetsWithSpent,
+  setBudgetShow,
+} from '@/database/table/budgets/queries';
 import type { BudgetWithSpent } from '@/types/budget';
 
 export default function BudgetsScreen() {
@@ -22,14 +25,31 @@ export default function BudgetsScreen() {
 
   const [budgets, setBudgets] = useState<BudgetWithSpent[]>([]);
 
+  // หน้านี้โชว์ทุกรายการเสมอ ไม่สนใจ is_show — ปุ่ม toggle ที่การ์ดมีผลแค่กับหน้า overview เท่านั้น
   const load = useCallback(async () => {
     try {
-      const data = await getBudgetsWithSpent(selectedYear, selectedMonth);
+      const data = await getBudgetsWithSpent(
+        selectedYear,
+        selectedMonth,
+        true
+      );
       setBudgets(data);
     } catch (error) {
       console.error('Failed to load budgets:', error);
     }
   }, [selectedMonth, selectedYear]);
+
+  const handleToggleShow = useCallback(
+    async (id: number, isShow: boolean) => {
+      try {
+        await setBudgetShow(id, isShow);
+        await load();
+      } catch (error) {
+        console.error('Failed to toggle budget visibility:', error);
+      }
+    },
+    [load]
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -89,6 +109,7 @@ export default function BudgetsScreen() {
                 params: { id: String(item.id) },
               })
             }
+            onToggleShow={(isShow) => handleToggleShow(item.id, isShow)}
           />
         )}
       />

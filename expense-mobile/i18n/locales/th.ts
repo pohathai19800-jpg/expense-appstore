@@ -232,6 +232,9 @@ export const th = {
     deleteConfirm: 'ต้องการลบงบประมาณนี้ใช่หรือไม่?',
     viewAll: 'ดูทั้งหมด',
     scopeSeparator: '·',
+    showOnList: 'แสดงในหน้า list',
+    showHiddenItems: 'แสดงรายการที่ปิดไว้',
+    hideHiddenItems: 'ซ่อนรายการที่ปิดไว้',
   },
 
   savingsGoal: {
@@ -254,6 +257,9 @@ export const th = {
     amount: 'จำนวนเงิน',
     amountRequired: 'กรุณากรอกจำนวนเงินให้ถูกต้อง',
     insufficientAmount: 'ยอดที่ออมไว้ไม่พอสำหรับถอนจำนวนนี้',
+    showOnList: 'แสดงในหน้า list',
+    showHiddenItems: 'แสดงรายการที่ปิดไว้',
+    hideHiddenItems: 'ซ่อนรายการที่ปิดไว้',
   },
 
   bill: {

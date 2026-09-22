@@ -12,6 +12,8 @@ export async function createSavingsGoalsTable() {
       target_amount REAL NOT NULL CHECK (target_amount > 0),
       current_amount REAL NOT NULL DEFAULT 0,
 
+      is_show INTEGER NOT NULL DEFAULT 1,
+
       created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
       updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
     );

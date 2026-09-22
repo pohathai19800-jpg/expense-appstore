@@ -1,6 +1,6 @@
 import { Pressable, Text, View } from 'react-native';
-import { useState } from 'react';
-import { useRouter } from 'expo-router';
+import { useCallback, useState } from 'react';
+import { useFocusEffect, useRouter } from 'expo-router';
 
 import { showAlert } from '@/utils/alert';
 
@@ -9,16 +9,20 @@ import { TransactionSummary } from '@/components/transactions/TransactionSummary
 import { TransactionList } from '@/components/transactions/TransactionList';
 import { MonthYearPicker } from '@/components/common/MonthYearPicker';
 import { BudgetCard } from '@/components/budgets/BudgetCard';
+import { SavingsGoalCard } from '@/components/savingsGoals/SavingsGoalCard';
 import { FAB } from '@/components/common/FAB';
 
 import { useTransactions } from '@/hooks/useTransactions';
 import { useSettings } from '@/contexts/SettingsContext';
 import { deleteTransaction } from '@/database/table/transactions/queries';
 import { deleteTransfer } from '@/database/table/transfers/queries';
+import { getSavingsGoals } from '@/database/table/savingsGoals/queries';
 
 import { transactionStyles } from '@/styles/transactions';
 import { budgetStyles } from '@/styles/budgets';
+import { savingsGoalStyles } from '@/styles/savingsGoals';
 import type { Transaction } from '@/types/transaction';
+import type { SavingsGoal } from '@/types/savingsGoal';
 
 export default function HomeScreen() {
   const { t } = useSettings();
@@ -33,6 +37,30 @@ export default function HomeScreen() {
 
   const { feed, summary, monthlySummary, budgets, refreshing, refresh } =
     useTransactions(selectedMonth, selectedYear);
+
+  // ดึงเฉพาะเป้าหมายการออมที่เปิดแสดง (is_show = 1) มาโชว์แบบย่อในหน้า overview
+  const [savingsGoals, setSavingsGoals] = useState<SavingsGoal[]>([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
+
+      (async () => {
+        try {
+          const data = await getSavingsGoals();
+          if (isActive) {
+            setSavingsGoals(data);
+          }
+        } catch (error) {
+          console.error('Failed to load savings goals:', error);
+        }
+      })();
+
+      return () => {
+        isActive = false;
+      };
+    }, [])
+  );
 
   const currentBalance = summary[0] ?? {
     currency_code: 'THB',
@@ -166,20 +194,26 @@ export default function HomeScreen() {
               currencyCode={currentMonthly.currency_code}
             />
 
+            {savingsGoals.length > 0 ? (
+              <View style={{ marginTop: 8 }}>
+
+                {savingsGoals.map((goal) => (
+                  <SavingsGoalCard
+                    key={goal.id}
+                    goal={goal}
+                    onPress={() =>
+                      router.push({
+                        pathname: '/savings-goal-form',
+                        params: { id: String(goal.id) },
+                      })
+                    }
+                  />
+                ))}
+              </View>
+            ) : null}
+
             {budgets.length > 0 ? (
-              <View style={{ marginTop: 8, marginBottom: 20 }}>
-                <View style={budgetStyles.sectionHeaderRow}>
-                  <Text style={budgetStyles.sectionTitle}>
-                    {t.budget.title}
-                  </Text>
-
-                  <Pressable onPress={() => router.push('/budgets')}>
-                    <Text style={budgetStyles.viewAllText}>
-                      {t.budget.viewAll}
-                    </Text>
-                  </Pressable>
-                </View>
-
+              <View style={{ marginTop: 8 }}>
                 {budgets.map((budget) => (
                   <BudgetCard
                     key={budget.id}

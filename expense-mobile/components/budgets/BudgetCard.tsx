@@ -1,4 +1,4 @@
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, Switch, Text, View } from 'react-native';
 
 import { useSettings } from '@/contexts/SettingsContext';
 import { formatAmount } from '@/utils/currency';
@@ -13,9 +13,10 @@ import { budgetStyles } from '@/styles/budgets';
 type BudgetCardProps = {
   budget: BudgetWithSpent;
   onPress?: () => void;
+  onToggleShow?: (isShow: boolean) => void;
 };
 
-export function BudgetCard({ budget, onPress }: BudgetCardProps) {
+export function BudgetCard({ budget, onPress, onToggleShow }: BudgetCardProps) {
   const { t, language } = useSettings();
 
   const currencyCode = budget.wallet_currency_code ?? 'THB';
@@ -23,6 +24,7 @@ export function BudgetCard({ budget, onPress }: BudgetCardProps) {
   const color = getBudgetColor(budget.spent, budget.amount);
   const isOver = budget.spent > budget.amount;
   const remaining = budget.amount - budget.spent;
+  const isShow = budget.is_show !== 0;
 
   return (
     <Pressable onPress={onPress} style={budgetStyles.card}>
@@ -66,6 +68,15 @@ export function BudgetCard({ budget, onPress }: BudgetCardProps) {
               language
             )}`}
       </Text>
+
+      {onToggleShow ? (
+        <View style={budgetStyles.showToggleRow}>
+          <Text style={budgetStyles.showToggleLabel}>
+            {t.budget.showOnList}
+          </Text>
+          <Switch value={isShow} onValueChange={onToggleShow} />
+        </View>
+      ) : null}
     </Pressable>
   );
 }

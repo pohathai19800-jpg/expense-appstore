@@ -1,4 +1,4 @@
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, Switch, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { useSettings } from '@/contexts/SettingsContext';
@@ -11,6 +11,7 @@ type SavingsGoalCardProps = {
   onPress?: () => void;
   onDeposit?: () => void;
   onWithdraw?: () => void;
+  onToggleShow?: (isShow: boolean) => void;
 };
 
 export function SavingsGoalCard({
@@ -18,12 +19,14 @@ export function SavingsGoalCard({
   onPress,
   onDeposit,
   onWithdraw,
+  onToggleShow,
 }: SavingsGoalCardProps) {
   const { t, language } = useSettings();
 
   const progress = Math.min(goal.current_amount / goal.target_amount, 1);
   const percent = progress * 100;
   const isReached = goal.current_amount >= goal.target_amount;
+  const isShow = goal.is_show !== 0;
 
   return (
     <Pressable onPress={onPress} style={styles.card}>
@@ -56,25 +59,38 @@ export function SavingsGoalCard({
         <View style={[styles.fill, { width: `${percent}%` }]} />
       </View>
 
-      <View style={styles.actionRow}>
-        <Pressable
-          onPress={onDeposit}
-          style={[styles.actionButton, styles.depositButton]}
-        >
-          <Ionicons name="arrow-down" size={14} color="#16A34A" />
-          <Text style={styles.depositButtonText}>{t.savingsGoal.deposit}</Text>
-        </Pressable>
+      {onDeposit || onWithdraw ? (
+        <View style={styles.actionRow}>
+          <Pressable
+            onPress={onDeposit}
+            style={[styles.actionButton, styles.depositButton]}
+          >
+            <Ionicons name="arrow-down" size={14} color="#16A34A" />
+            <Text style={styles.depositButtonText}>
+              {t.savingsGoal.deposit}
+            </Text>
+          </Pressable>
 
-        <Pressable
-          onPress={onWithdraw}
-          style={[styles.actionButton, styles.withdrawButton]}
-        >
-          <Ionicons name="arrow-up" size={14} color="#DC2626" />
-          <Text style={styles.withdrawButtonText}>
-            {t.savingsGoal.withdraw}
+          <Pressable
+            onPress={onWithdraw}
+            style={[styles.actionButton, styles.withdrawButton]}
+          >
+            <Ionicons name="arrow-up" size={14} color="#DC2626" />
+            <Text style={styles.withdrawButtonText}>
+              {t.savingsGoal.withdraw}
+            </Text>
+          </Pressable>
+        </View>
+      ) : null}
+
+      {onToggleShow ? (
+        <View style={styles.showToggleRow}>
+          <Text style={styles.showToggleLabel}>
+            {t.savingsGoal.showOnList}
           </Text>
-        </Pressable>
-      </View>
+          <Switch value={isShow} onValueChange={onToggleShow} />
+        </View>
+      ) : null}
     </Pressable>
   );
 }

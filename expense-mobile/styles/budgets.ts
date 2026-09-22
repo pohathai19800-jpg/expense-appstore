@@ -85,4 +85,18 @@ export const budgetStyles = StyleSheet.create({
     color: '#9CA3AF',
     textAlign: 'center',
   },
+
+  showToggleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 10,
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#F3F4F6',
+  },
+  showToggleLabel: {
+    fontSize: 12,
+    color: '#6B7280',
+  },
 });

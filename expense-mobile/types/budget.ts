@@ -4,6 +4,7 @@ export interface Budget {
   wallet_id: number | null;
   category_id: number | null;
   amount: number;
+  is_show: number;
   created_at: string;
   updated_at: string;
 }

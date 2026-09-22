@@ -110,6 +110,24 @@ export const savingsGoalStyles = StyleSheet.create({
     textAlign: 'center',
   },
 
+  // ใช้ในหน้า Home (overview)
+  sectionHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#111827',
+  },
+  viewAllText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#2563EB',
+  },
+
   // หน้าฝาก/ถอนเงิน
   summaryCard: {
     backgroundColor: '#FFFFFF',
@@ -127,5 +145,19 @@ export const savingsGoalStyles = StyleSheet.create({
     fontSize: 26,
     fontWeight: '700',
     color: '#111827',
+  },
+
+  showToggleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 10,
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#F3F4F6',
+  },
+  showToggleLabel: {
+    fontSize: 12,
+    color: '#6B7280',
   },
 });

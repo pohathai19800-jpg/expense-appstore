@@ -102,7 +102,8 @@ export async function deleteBudget(id: number): Promise<void> {
  */
 export async function getBudgetsWithSpent(
   year: number,
-  month: number
+  month: number,
+  includeHidden: boolean = false
 ): Promise<BudgetWithSpent[]> {
   const db = await getDatabase();
 
@@ -116,6 +117,7 @@ export async function getBudgetsWithSpent(
         b.wallet_id,
         b.category_id,
         b.amount,
+        b.is_show,
         b.created_at,
         b.updated_at,
 
@@ -141,8 +143,28 @@ export async function getBudgetsWithSpent(
       FROM budgets b
       LEFT JOIN wallets w ON w.id = b.wallet_id
       LEFT JOIN categories c ON c.id = b.category_id
-      ORDER BY b.created_at ASC
+      WHERE (? = 1 OR b.is_show = 1)
+      ORDER BY b.is_show DESC, b.created_at ASC
     `,
-    `${prefix}%`
+    `${prefix}%`,
+    includeHidden ? 1 : 0
+  );
+}
+
+// ควบคุมว่ารายการนี้จะแสดงในหน้า list หรือไม่ (ไม่กระทบการคำนวณ/การทำงานอื่นของงบประมาณ)
+export async function setBudgetShow(
+  id: number,
+  isShow: boolean
+): Promise<void> {
+  const db = await getDatabase();
+
+  await db.runAsync(
+    `
+      UPDATE budgets
+      SET is_show = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `,
+    isShow ? 1 : 0,
+    id
   );
 }

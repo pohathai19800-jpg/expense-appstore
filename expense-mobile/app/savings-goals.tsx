@@ -7,7 +7,10 @@ import { FAB } from '@/components/common/FAB';
 import { SavingsGoalCard } from '@/components/savingsGoals/SavingsGoalCard';
 import { savingsGoalStyles } from '@/styles/savingsGoals';
 
-import { getSavingsGoals } from '@/database/table/savingsGoals/queries';
+import {
+  getSavingsGoals,
+  setSavingsGoalShow,
+} from '@/database/table/savingsGoals/queries';
 import type { SavingsGoal } from '@/types/savingsGoal';
 
 export default function SavingsGoalsScreen() {
@@ -16,14 +19,27 @@ export default function SavingsGoalsScreen() {
 
   const [goals, setGoals] = useState<SavingsGoal[]>([]);
 
+  // หน้านี้โชว์ทุกรายการเสมอ ไม่สนใจ is_show — ปุ่ม toggle ที่การ์ดมีผลแค่กับหน้า overview เท่านั้น
   const load = useCallback(async () => {
     try {
-      const data = await getSavingsGoals();
+      const data = await getSavingsGoals(true);
       setGoals(data);
     } catch (error) {
       console.error('Failed to load savings goals:', error);
     }
   }, []);
+
+  const handleToggleShow = useCallback(
+    async (id: number, isShow: boolean) => {
+      try {
+        await setSavingsGoalShow(id, isShow);
+        await load();
+      } catch (error) {
+        console.error('Failed to toggle savings goal visibility:', error);
+      }
+    },
+    [load]
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -84,6 +100,7 @@ export default function SavingsGoalsScreen() {
                 params: { id: String(item.id), mode: 'withdraw' },
               })
             }
+            onToggleShow={(isShow) => handleToggleShow(item.id, isShow)}
           />
         )}
       />

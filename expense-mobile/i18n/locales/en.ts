@@ -232,6 +232,9 @@ export const en = {
     deleteConfirm: 'Delete this budget?',
     viewAll: 'View all',
     scopeSeparator: '·',
+    showOnList: 'Show on list',
+    showHiddenItems: 'Show hidden items',
+    hideHiddenItems: 'Hide hidden items',
   },
 
   savingsGoal: {
@@ -254,6 +257,9 @@ export const en = {
     amount: 'Amount',
     amountRequired: 'Please enter a valid amount',
     insufficientAmount: "You don't have enough saved to withdraw that much",
+    showOnList: 'Show on list',
+    showHiddenItems: 'Show hidden items',
+    hideHiddenItems: 'Hide hidden items',
   },
 
   bill: {

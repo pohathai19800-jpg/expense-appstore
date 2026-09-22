@@ -72,6 +72,14 @@ async function ensureSchemaIntegrity() {
   await createBillsTable();
   await createSavingsGoalsTable();
 
+  // รองรับเครื่องที่เคยสร้างตาราง budgets / savings_goals ไว้แล้วก่อนที่จะมีคอลัมน์ is_show
+  await ensureColumn('budgets', 'is_show', 'INTEGER NOT NULL DEFAULT 1');
+  await ensureColumn(
+    'savings_goals',
+    'is_show',
+    'INTEGER NOT NULL DEFAULT 1'
+  );
+
   await ensureColumn(
     'transactions',
     'bill_id',

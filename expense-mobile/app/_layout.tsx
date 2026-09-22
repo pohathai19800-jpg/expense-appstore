@@ -69,6 +69,11 @@ function RootNavigator() {
         options={{ presentation: 'modal', title: '' }}
       />
 
+      <Stack.Screen
+        name="budget-plan-form"
+        options={{ presentation: 'modal', title: '' }}
+      />
+
       <Stack.Screen name="budgets" options={{ title: '' }} />
 
       <Stack.Screen name="bills" options={{ title: '' }} />

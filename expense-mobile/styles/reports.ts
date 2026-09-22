@@ -120,4 +120,139 @@ export const reportsStyles = StyleSheet.create({
     fontWeight: '700',
     color: '#111827',
   },
+
+  // สลับหน้า "รายงาน" / "จัดสรรงบ" อยู่บนสุดของหน้า แยกจาก tabRow (รายจ่าย/รายรับ)
+  pageModeRow: {
+    flexDirection: 'row',
+    backgroundColor: '#EEF0F3',
+    borderRadius: 14,
+    padding: 4,
+    marginBottom: 16,
+  },
+  pageModeTab: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  pageModeTabActive: {
+    backgroundColor: '#FFFFFF',
+  },
+  pageModeText: {
+    fontWeight: '600',
+    color: '#6B7280',
+  },
+  pageModeTextActive: {
+    color: '#2563EB',
+  },
+
+  // ใช้ในหน้า "จัดสรรงบ" ของหน้า Reports
+  allocationHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  editPlanButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: '#EFF6FF',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 10,
+  },
+  editPlanButtonText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#2563EB',
+  },
+  allocationTargetCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 16,
+  },
+  allocationTargetHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  allocationTargetValue: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#111827',
+    marginBottom: 8,
+  },
+  allocationSummaryText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#6B7280',
+  },
+  allocationItemBlock: {
+    width: '100%',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F3F4F6',
+  },
+  allocationItemTopRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  allocationIconBadge: {
+    width: 24,
+    height: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  allocationItemLabel: {
+    flex: 1,
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#111827',
+  },
+  allocationItemPercent: {
+    fontSize: 12,
+    color: '#9CA3AF',
+    marginRight: 8,
+  },
+  allocationItemAmount: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#111827',
+  },
+  allocationItemSpent: {
+    fontSize: 12,
+    color: '#6B7280',
+    marginTop: 2,
+  },
+  allocationTrack: {
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#F3F4F6',
+    overflow: 'hidden',
+    marginTop: 8,
+  },
+  allocationFill: {
+    height: 8,
+    borderRadius: 4,
+  },
+  allocationSpentText: {
+    fontSize: 11,
+    color: '#9CA3AF',
+    marginTop: 6,
+  },
+  saveButton: {
+    backgroundColor: '#2563EB',
+    borderRadius: 12,
+    paddingVertical: 14,
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  saveButtonText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '700',
+  },
 });

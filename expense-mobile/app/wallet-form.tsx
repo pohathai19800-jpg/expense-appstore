@@ -24,6 +24,7 @@ import {
   createWallet,
   deleteWallet,
   getWalletById,
+  getWalletDependencyCounts,
   updateWallet,
 } from '@/database/table/wallets/queries';
 
@@ -142,23 +143,62 @@ export default function WalletFormScreen() {
     }
   };
 
-  const handleDelete = () => {
+  const performDelete = async () => {
     if (!editingId) return;
+
+    try {
+      await deleteWallet(editingId);
+      router.back();
+    } catch (err) {
+      console.error('Failed to delete wallet:', err);
+      showAlert(t.common.error, t.wallet.deleteHasTransactions);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!editingId) return;
+
+    // เช็คก่อนว่ามี bills/budgets ผูกอยู่ไหม เพราะสองตารางนี้ตั้ง
+    // ON DELETE CASCADE ไว้ ลบ wallet แล้วจะถูกลบตามไปแบบเงียบๆ โดยไม่มี
+    // error ให้ catch เหมือนกรณี transactions (ที่เป็น RESTRICT)
+    let dependents: { bills: number; budgets: number } = {
+      bills: 0,
+      budgets: 0,
+    };
+
+    try {
+      dependents = await getWalletDependencyCounts(editingId);
+    } catch (err) {
+      console.error('Failed to check wallet dependencies:', err);
+    }
+
+    const linkedCount = dependents.bills + dependents.budgets;
+
+    if (linkedCount > 0) {
+      showAlert(
+        t.wallet.deleteHasBillsOrBudgetsTitle,
+        t.wallet.deleteHasBillsOrBudgetsMessage.replace(
+          '{count}',
+          String(linkedCount)
+        ),
+        [
+          { text: t.common.cancel, style: 'cancel' },
+          {
+            text: t.common.delete,
+            style: 'destructive',
+            onPress: performDelete,
+          },
+        ]
+      );
+      return;
+    }
 
     showAlert(t.common.deleteConfirmTitle, t.wallet.deleteConfirm, [
       { text: t.common.cancel, style: 'cancel' },
       {
         text: t.common.delete,
         style: 'destructive',
-        onPress: async () => {
-          try {
-            await deleteWallet(editingId);
-            router.back();
-          } catch (err) {
-            console.error('Failed to delete wallet:', err);
-            showAlert(t.common.error, t.wallet.deleteHasTransactions);
-          }
-        },
+        onPress: performDelete,
       },
     ]);
   };

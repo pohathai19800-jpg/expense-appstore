@@ -79,6 +79,9 @@ export const th = {
     deleteConfirm: 'ต้องการลบ Wallet นี้ใช่หรือไม่?',
     deleteHasTransactions:
       'ไม่สามารถลบ Wallet นี้ได้ เนื่องจากมีรายการเชื่อมอยู่',
+    deleteHasBillsOrBudgetsTitle: 'Wallet นี้มีบิลหรืองบประมาณผูกอยู่',
+    deleteHasBillsOrBudgetsMessage:
+      'การลบ Wallet นี้จะลบบิล/งบประมาณที่ผูกอยู่ {count} รายการทิ้งไปด้วยอย่างถาวร ไม่สามารถย้อนกลับได้ ต้องการดำเนินการต่อหรือไม่',
     transfer: 'โอนเงินระหว่าง Wallet',
     transferTitle: 'โอนเงิน',
     fromWallet: 'จาก Wallet',

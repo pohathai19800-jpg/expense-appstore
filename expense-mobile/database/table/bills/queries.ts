@@ -161,6 +161,10 @@ export async function markBillPaid(billId: number): Promise<void> {
   const now = new Date();
   const period = currentPeriod(now);
 
+  // กันตัดซ้ำ — ถ้ารอบนี้ถูกบันทึกจ่ายไปแล้ว (ไม่ว่าจะกดเองหรือตัดอัตโนมัติ)
+  // ไม่ต้องสร้างธุรกรรมซ้ำอีก ไม่ควรพึ่งแค่ฝั่ง UI ที่ซ่อนปุ่มไว้เท่านั้น
+  if (bill.last_charged_period === period) return;
+
   await db.runAsync(
     `
       INSERT INTO transactions (wallet_id, category_id, bill_id, type, amount, note, transaction_date)

@@ -79,6 +79,9 @@ export const en = {
     deleteConfirm: 'Delete this wallet?',
     deleteHasTransactions:
       "This wallet can't be deleted because it has linked transactions",
+    deleteHasBillsOrBudgetsTitle: 'This wallet has linked bills or budgets',
+    deleteHasBillsOrBudgetsMessage:
+      'Deleting this wallet will also permanently delete {count} linked bill(s)/budget(s). This cannot be undone. Continue?',
     transfer: 'Transfer between wallets',
     transferTitle: 'Transfer',
     fromWallet: 'From wallet',

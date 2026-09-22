@@ -239,6 +239,53 @@ export async function setWalletActive(
   );
 }
 
+export type WalletDependencyCounts = {
+  transactions: number;
+  bills: number;
+  budgets: number;
+};
+
+// เช็คว่า wallet นี้มีอะไรผูกอยู่บ้างก่อนลบ — transactions/transfers ถูกกันด้วย
+// FK RESTRICT อยู่แล้ว (ลบไม่ได้ ต้อง catch error) แต่ bills/budgets ตั้ง
+// ON DELETE CASCADE ไว้ ลบ wallet แล้วจะถูกลบตามไปด้วยแบบเงียบๆ โดยไม่มี error
+// ให้ catch จึงต้องเช็คล่วงหน้าเพื่อเตือนผู้ใช้ก่อน
+export async function getWalletDependencyCounts(
+  walletId: number
+): Promise<WalletDependencyCounts> {
+  const db = await getDatabase();
+
+  const transactionRow = await db.getFirstAsync<{ count: number }>(
+    `SELECT COUNT(*) AS count FROM transactions WHERE wallet_id = ?`,
+    walletId
+  );
+
+  const transferRow = await db.getFirstAsync<{ count: number }>(
+    `
+      SELECT COUNT(*) AS count
+      FROM transfers
+      WHERE from_wallet_id = ? OR to_wallet_id = ?
+    `,
+    walletId,
+    walletId
+  );
+
+  const billRow = await db.getFirstAsync<{ count: number }>(
+    `SELECT COUNT(*) AS count FROM bills WHERE wallet_id = ?`,
+    walletId
+  );
+
+  const budgetRow = await db.getFirstAsync<{ count: number }>(
+    `SELECT COUNT(*) AS count FROM budgets WHERE wallet_id = ?`,
+    walletId
+  );
+
+  return {
+    transactions: (transactionRow?.count ?? 0) + (transferRow?.count ?? 0),
+    bills: billRow?.count ?? 0,
+    budgets: budgetRow?.count ?? 0,
+  };
+}
+
 export async function deleteWallet(id: number): Promise<void> {
   const db = await getDatabase();
 

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Pressable,
   ScrollView,
@@ -14,7 +14,7 @@ import { useSettings } from '@/contexts/SettingsContext';
 
 import { SelectField } from '@/components/common/SelectField';
 import { DateField } from '@/components/common/DateField';
-import { NumericKeypad } from '@/components/common/์NumericKeypad';
+import { NumericKeypad } from '@/components/common/NumericKeypad';
 
 import { getActiveWallets } from '@/database/table/wallets/queries';
 import { getCategoriesByType } from '@/database/table/categories/queries';
@@ -62,6 +62,11 @@ export default function TransactionFormScreen() {
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // เก็บว่า categories ที่โหลดล่าสุดตรงกับ type ไหน ใช้กันไม่ให้ effect เคลียร์
+  // categoryId ทำงานกับ categories ที่ยังโหลดไม่เสร็จ/ยังเป็นของ type เก่า (race
+  // condition ระหว่าง loadOptions กับ loadExisting ตอนเปิดหน้าแก้ไขรายการ)
+  const categoriesTypeRef = useRef<TransactionType | null>(null);
+
   const loadOptions = useCallback(async () => {
     try {
       const [walletList, categoryList] = await Promise.all([
@@ -71,6 +76,7 @@ export default function TransactionFormScreen() {
 
       setWallets(walletList);
       setCategories(categoryList);
+      categoriesTypeRef.current = type;
 
       if (!walletId && walletList.length > 0 && !isEditing) {
         const lastUsedId = await getMostRecentWalletId();
@@ -123,11 +129,17 @@ export default function TransactionFormScreen() {
   }, [editingId]);
 
   // ล้างหมวดหมู่ที่เลือกไว้เมื่อสลับประเภท ถ้าหมวดหมู่นั้นไม่อยู่ในลิสต์ใหม่
+  // ต้องรอให้ categories เป็นของ type ปัจจุบันจริงๆ ก่อน (ดู categoriesTypeRef
+  // ด้านบน) ไม่งั้นตอนเปิดหน้าแก้ไขรายการ ถ้า loadExisting เซ็ต type/categoryId
+  // เสร็จก่อน loadOptions จะโหลดหมวดหมู่ของ type ใหม่เสร็จ เอฟเฟกต์นี้จะเห็น
+  // categories ของ type เก่า (หรือค่าว่าง) แล้วเคลียร์ categoryId ที่ถูกต้องทิ้งไปเลย
   useEffect(() => {
+    if (categoriesTypeRef.current !== type) return;
+
     if (categoryId && !categories.some((c) => String(c.id) === categoryId)) {
       setCategoryId(null);
     }
-  }, [categories, categoryId]);
+  }, [categories, categoryId, type]);
 
   const walletOptions = wallets.map((w) => ({
     id: String(w.id),

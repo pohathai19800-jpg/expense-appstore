@@ -213,7 +213,7 @@ export default function HomeScreen() {
             ) : null}
 
             {budgets.length > 0 ? (
-              <View style={{ marginTop: 8 }}>
+              <View style={{ marginTop: 8, marginBottom: 20 }}>
                 {budgets.map((budget) => (
                   <BudgetCard
                     key={budget.id}

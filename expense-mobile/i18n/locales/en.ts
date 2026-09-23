@@ -123,7 +123,7 @@ export const en = {
     allocatedLabel: 'Allocated',
     spentSoFar: 'Spent so far',
     empty: 'No budget plan for this month yet',
-    emptySubtitle: 'Tap below to enter income and split it by category %',
+    emptySubtitle: 'Tap below to enter income',
     createCategoryFirst: 'Create a category',
     createPlan: 'Create a plan',
     editPlan: 'Edit plan',

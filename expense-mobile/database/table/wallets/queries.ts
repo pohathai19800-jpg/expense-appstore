@@ -18,6 +18,7 @@ export async function getWallets(): Promise<WalletWithBalance[]> {
     wallets.map(async (wallet) => ({
       ...wallet,
       is_active: Boolean(wallet.is_active),
+      hide_amount: Boolean(wallet.hide_amount),
       balance: await getWalletBalance(wallet.id),
     }))
   );
@@ -37,6 +38,7 @@ export async function getActiveWallets(): Promise<WalletWithBalance[]> {
     wallets.map(async (wallet) => ({
       ...wallet,
       is_active: Boolean(wallet.is_active),
+      hide_amount: Boolean(wallet.hide_amount),
       balance: await getWalletBalance(wallet.id),
     }))
   );
@@ -63,6 +65,7 @@ export async function getWalletById(
   return {
     ...wallet,
     is_active: Boolean(wallet.is_active),
+    hide_amount: Boolean(wallet.hide_amount),
     balance: await getWalletBalance(wallet.id),
   };
 }
@@ -235,6 +238,27 @@ export async function setWalletActive(
       WHERE id = ?
     `,
     isActive ? 1 : 0,
+    id
+  );
+}
+
+// ควบคุมว่าจำนวนเงินของ wallet นี้จะถูกซ่อน (แสดงเป็น ****) และไม่ถูกนับรวมในยอดรวมหรือไม่
+// ไม่กระทบยอดเงินจริงหรือธุรกรรมใดๆ ของ wallet
+export async function setWalletHideAmount(
+  id: number,
+  hideAmount: boolean
+): Promise<void> {
+  const db = await getDatabase();
+
+  await db.runAsync(
+    `
+      UPDATE wallets
+      SET
+        hide_amount = ?,
+        updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `,
+    hideAmount ? 1 : 0,
     id
   );
 }

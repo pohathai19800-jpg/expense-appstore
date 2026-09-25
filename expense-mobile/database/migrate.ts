@@ -55,6 +55,11 @@ async function ensureSchemaIntegrity() {
   await ensureColumn('wallets', 'is_active', 'INTEGER NOT NULL DEFAULT 1');
   await ensureColumn(
     'wallets',
+    'hide_amount',
+    'INTEGER NOT NULL DEFAULT 0'
+  );
+  await ensureColumn(
+    'wallets',
     'icon',
     "TEXT NOT NULL DEFAULT 'wallet-outline'"
   );

@@ -9,6 +9,7 @@ import { formatAmount } from '@/utils/currency';
 
 import {
   getWallets,
+  setWalletHideAmount,
   type WalletWithBalance,
 } from '@/database/table/wallets/queries';
 
@@ -33,9 +34,10 @@ export default function WalletScreen() {
     }, [loadWallets])
   );
 
+  // ยอดรวมไม่นับ wallet ที่ปิดใช้งาน หรือ wallet ที่ตั้งซ่อนจำนวนเงินไว้ (hide_amount)
   const totalsByCurrency = wallets.reduce<Record<string, number>>(
     (acc, wallet) => {
-      if (!wallet.is_active) return acc;
+      if (!wallet.is_active || wallet.hide_amount) return acc;
       acc[wallet.currency_code] =
         (acc[wallet.currency_code] ?? 0) + wallet.balance;
       return acc;
@@ -48,6 +50,18 @@ export default function WalletScreen() {
 
   const handleAddWallet = () => {
     router.push('/wallet-form');
+  };
+
+  const handleToggleHideAmount = async (
+    walletId: number,
+    hideAmount: boolean
+  ) => {
+    try {
+      await setWalletHideAmount(walletId, hideAmount);
+      await loadWallets();
+    } catch (error) {
+      console.error('Failed to toggle wallet hide amount:', error);
+    }
   };
 
   return (
@@ -133,8 +147,24 @@ export default function WalletScreen() {
             </View>
 
             <Text style={styles.walletBalance}>
-              {formatAmount(item.balance, item.currency_code, language)}
+              {item.hide_amount
+                ? '••••••'
+                : formatAmount(item.balance, item.currency_code, language)}
             </Text>
+
+            <Pressable
+              onPress={() =>
+                handleToggleHideAmount(item.id, !item.hide_amount)
+              }
+              hitSlop={8}
+              style={styles.hideAmountButton}
+            >
+              <Ionicons
+                name={item.hide_amount ? 'eye-off-outline' : 'eye-outline'}
+                size={18}
+                color="#9CA3AF"
+              />
+            </Pressable>
           </Pressable>
         )}
       />
@@ -236,5 +266,9 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '700',
     color: '#111827',
+  },
+  hideAmountButton: {
+    marginLeft: 8,
+    padding: 4,
   },
 });

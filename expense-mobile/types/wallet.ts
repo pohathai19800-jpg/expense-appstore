@@ -4,6 +4,7 @@ export interface Wallet {
   currency_code: string;
   initial_balance: number;
   is_active: boolean;
+  hide_amount: boolean;
   icon: string;
   color: string;
   created_at: string;

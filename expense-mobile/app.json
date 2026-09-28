@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "expense-mobile",
+    "name": "expense",
     "slug": "expense-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -9,9 +9,11 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.pojai.expenseapp"
     },
     "android": {
+      "package": "com.pojai.expenseapp",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",

@@ -3,10 +3,12 @@ import { FlatList, Text, View } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 
 import { useSettings } from '@/contexts/SettingsContext';
+import { usePurchases } from '@/contexts/PurchasesContext';
 import { FAB } from '@/components/common/FAB';
 import { MonthYearPicker } from '@/components/common/MonthYearPicker';
 import { BudgetCard } from '@/components/budgets/BudgetCard';
 import { budgetStyles } from '@/styles/budgets';
+import { showAlert } from '@/utils/alert';
 
 import {
   getBudgetsWithSpent,
@@ -14,8 +16,12 @@ import {
 } from '@/database/table/budgets/queries';
 import type { BudgetWithSpent } from '@/types/budget';
 
+// จำนวน budget สูงสุดที่ผู้ใช้ฟรี (ยังไม่สมัคร Pro) สร้างได้
+const FREE_BUDGET_LIMIT = 1;
+
 export default function BudgetsScreen() {
   const { t } = useSettings();
+  const { isPro } = usePurchases();
   const router = useRouter();
 
   const [selectedMonth, setSelectedMonth] = useState(
@@ -56,6 +62,29 @@ export default function BudgetsScreen() {
       load();
     }, [load])
   );
+
+  // ผู้ใช้ฟรีสร้างงบประมาณได้ไม่เกิน FREE_BUDGET_LIMIT รายการ ของเดิมที่มีอยู่แล้วดู/แก้ไข/ใช้งานได้ปกติ
+  const handleAddBudget = () => {
+    if (!isPro && budgets.length >= FREE_BUDGET_LIMIT) {
+      showAlert(
+        t.subscription.itemLimitTitle,
+        t.subscription.itemLimitMessage.replace(
+          '{limit}',
+          String(FREE_BUDGET_LIMIT)
+        ),
+        [
+          { text: t.common.cancel, style: 'cancel' },
+          {
+            text: t.subscription.upgrade,
+            onPress: () => router.push('/paywall'),
+          },
+        ]
+      );
+      return;
+    }
+
+    router.push('/budget-form');
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: '#F5F7FA' }}>
@@ -114,7 +143,7 @@ export default function BudgetsScreen() {
         )}
       />
 
-      <FAB onPress={() => router.push('/budget-form')} />
+      <FAB onPress={handleAddBudget} />
     </View>
   );
 }

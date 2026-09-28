@@ -290,4 +290,29 @@ export const th = {
     deleteConfirm: 'ต้องการลบบิลนี้ใช่หรือไม่? (ลบทิ้งถาวร ต่างจากการปิดบิล)',
     dayOfMonthShort: 'ทุกวันที่ {day}',
   },
+
+  subscription: {
+    upgrade: 'อัปเกรดเป็น Pro',
+    featureLockedTitle: 'ฟีเจอร์นี้สำหรับสมาชิก Pro',
+    featureLockedMessage:
+      'สมัครสมาชิก Pro เพื่อสร้างและแก้ไขงบประมาณหรือเป้าหมายการออม',
+    walletLimitTitle: 'ครบจำนวนบัญชีฟรีแล้ว',
+    walletLimitMessage:
+      'บัญชีฟรีสร้างได้สูงสุด {limit} บัญชี อัปเกรดเป็น Pro เพื่อสร้างเพิ่มได้ไม่จำกัด',
+    itemLimitTitle: 'ครบจำนวนฟรีแล้ว',
+    itemLimitMessage:
+      'บัญชีฟรีสร้างได้สูงสุด {limit} รายการ อัปเกรดเป็น Pro เพื่อสร้างเพิ่มได้ไม่จำกัด',
+    paywallTitle: 'อัปเกรดเป็น Pro',
+    paywallSubtitle: 'ปลดล็อกฟีเจอร์ทั้งหมดของ Expense',
+    featureWallet: 'สร้าง Wallet ได้ไม่จำกัด',
+    featureBudget: 'สร้างและแก้ไขงบประมาณ',
+    featureSavings: 'สร้างและแก้ไขเป้าหมายการออม',
+    restorePurchases: 'เคยซื้อแล้ว? กู้คืนการซื้อ',
+    purchaseSuccess: 'สมัครสมาชิกสำเร็จ',
+    purchaseFailed: 'การสมัครสมาชิกไม่สำเร็จ ลองใหม่อีกครั้ง',
+    restoreSuccess: 'กู้คืนการซื้อสำเร็จ',
+    restoreFailed: 'ไม่พบการซื้อที่เคยทำไว้',
+    noPackagesAvailable: 'ยังไม่มีแพ็กเกจให้เลือกในขณะนี้',
+    alreadyPro: 'คุณเป็นสมาชิก Pro อยู่แล้ว',
+  },
 } as const;

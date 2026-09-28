@@ -12,6 +12,7 @@ import { ActivityIndicator, View } from 'react-native';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { SettingsProvider, useSettings } from '@/contexts/SettingsContext';
+import { PurchasesProvider } from '@/contexts/PurchasesContext';
 
 export const unstable_settings = {
   anchor: '(tabs)',
@@ -88,6 +89,11 @@ function RootNavigator() {
 
       <Stack.Screen name="budgets" options={{ title: '' }} />
 
+      <Stack.Screen
+        name="paywall"
+        options={{ presentation: 'modal', title: '' }}
+      />
+
       <Stack.Screen name="bills" options={{ title: '' }} />
 
       <Stack.Screen name="categories" options={{ title: '' }} />
@@ -107,7 +113,9 @@ export default function RootLayout() {
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <BottomSheetModalProvider>
           <SettingsProvider>
-            <RootNavigator />
+            <PurchasesProvider>
+              <RootNavigator />
+            </PurchasesProvider>
           </SettingsProvider>
 
           <StatusBar style="auto" />

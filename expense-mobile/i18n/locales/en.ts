@@ -291,4 +291,29 @@ export const en = {
     deleteConfirm: 'Delete this bill? (Permanent — different from closing)',
     dayOfMonthShort: 'Day {day}',
   },
+
+  subscription: {
+    upgrade: 'Upgrade to Pro',
+    featureLockedTitle: 'This feature is for Pro members',
+    featureLockedMessage:
+      'Subscribe to Pro to create or edit budgets and savings goals',
+    walletLimitTitle: "You've reached the free wallet limit",
+    walletLimitMessage:
+      'Free accounts can create up to {limit} wallets. Upgrade to Pro for unlimited wallets',
+    itemLimitTitle: "You've reached the free limit",
+    itemLimitMessage:
+      'Free accounts can create up to {limit} of these. Upgrade to Pro for unlimited',
+    paywallTitle: 'Upgrade to Pro',
+    paywallSubtitle: 'Unlock all Expense features',
+    featureWallet: 'Unlimited wallets',
+    featureBudget: 'Create and edit budgets',
+    featureSavings: 'Create and edit savings goals',
+    restorePurchases: 'Already purchased? Restore purchases',
+    purchaseSuccess: 'Subscription successful',
+    purchaseFailed: 'Subscription failed. Please try again',
+    restoreSuccess: 'Purchases restored successfully',
+    restoreFailed: 'No previous purchases found',
+    noPackagesAvailable: 'No packages available right now',
+    alreadyPro: "You're already a Pro member",
+  },
 } as const;

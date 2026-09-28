@@ -3,6 +3,7 @@ import { FlatList, Text, View } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 
 import { useSettings } from '@/contexts/SettingsContext';
+import { usePurchases } from '@/contexts/PurchasesContext';
 import { showAlert } from '@/utils/alert';
 import { FAB } from '@/components/common/FAB';
 import { BillCard } from '@/components/bills/BillCard';
@@ -15,8 +16,12 @@ import {
 } from '@/database/table/bills/queries';
 import type { BillWithDetails } from '@/types/bill';
 
+// จำนวนบิลสูงสุดที่ผู้ใช้ฟรี (ยังไม่สมัคร Pro) สร้างได้
+const FREE_BILL_LIMIT = 1;
+
 export default function BillsScreen() {
   const { t } = useSettings();
+  const { isPro } = usePurchases();
   const router = useRouter();
 
   const [bills, setBills] = useState<BillWithDetails[]>([]);
@@ -35,6 +40,29 @@ export default function BillsScreen() {
       load();
     }, [load])
   );
+
+  // ผู้ใช้ฟรีสร้างบิลได้ไม่เกิน FREE_BILL_LIMIT รายการ ของเดิมที่มีอยู่แล้วดู/แก้ไข/จ่ายบิล/ตั้งตัดเงินอัตโนมัติได้ปกติ
+  const handleAddBill = () => {
+    if (!isPro && bills.length >= FREE_BILL_LIMIT) {
+      showAlert(
+        t.subscription.itemLimitTitle,
+        t.subscription.itemLimitMessage.replace(
+          '{limit}',
+          String(FREE_BILL_LIMIT)
+        ),
+        [
+          { text: t.common.cancel, style: 'cancel' },
+          {
+            text: t.subscription.upgrade,
+            onPress: () => router.push('/paywall'),
+          },
+        ]
+      );
+      return;
+    }
+
+    router.push('/bill-form');
+  };
 
   const handleToggleAutoCharge = async (billId: number, value: boolean) => {
     try {
@@ -109,7 +137,7 @@ export default function BillsScreen() {
         )}
       />
 
-      <FAB onPress={() => router.push('/bill-form')} />
+      <FAB onPress={handleAddBill} />
     </View>
   );
 }

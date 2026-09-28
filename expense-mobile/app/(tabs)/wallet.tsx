@@ -4,8 +4,10 @@ import { useFocusEffect, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
 import { useSettings } from '@/contexts/SettingsContext';
+import { usePurchases } from '@/contexts/PurchasesContext';
 import { FAB } from '@/components/common/FAB';
 import { formatAmount } from '@/utils/currency';
+import { showAlert } from '@/utils/alert';
 
 import {
   getWallets,
@@ -13,8 +15,12 @@ import {
   type WalletWithBalance,
 } from '@/database/table/wallets/queries';
 
+// จำนวน wallet สูงสุดที่ผู้ใช้ฟรี (ยังไม่สมัคร Pro) สร้างได้
+const FREE_WALLET_LIMIT = 2;
+
 export default function WalletScreen() {
   const { t, language } = useSettings();
+  const { isPro } = usePurchases();
   const router = useRouter();
 
   const [wallets, setWallets] = useState<WalletWithBalance[]>([]);
@@ -49,6 +55,25 @@ export default function WalletScreen() {
   const activeWallets = wallets.filter((w) => w.is_active);
 
   const handleAddWallet = () => {
+    // ผู้ใช้ฟรีสร้าง wallet ได้ไม่เกิน FREE_WALLET_LIMIT บัญชี ต้องอัปเกรด Pro ถึงจะเพิ่มได้ไม่จำกัด
+    if (!isPro && wallets.length >= FREE_WALLET_LIMIT) {
+      showAlert(
+        t.subscription.walletLimitTitle,
+        t.subscription.walletLimitMessage.replace(
+          '{limit}',
+          String(FREE_WALLET_LIMIT)
+        ),
+        [
+          { text: t.common.cancel, style: 'cancel' },
+          {
+            text: t.subscription.upgrade,
+            onPress: () => router.push('/paywall'),
+          },
+        ]
+      );
+      return;
+    }
+
     router.push('/wallet-form');
   };
 

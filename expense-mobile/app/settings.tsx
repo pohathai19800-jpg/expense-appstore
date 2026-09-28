@@ -1,14 +1,18 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
 import { showAlert } from '@/utils/alert';
 import { useSettings } from '@/contexts/SettingsContext';
+import { usePurchases } from '@/contexts/PurchasesContext';
 import { languages } from '@/i18n/config';
 import type { Language } from '@/i18n/config';
 import { migrateDatabase, resetDatabase } from '@/database';
 
 export default function SettingsScreen() {
   const { t, language, setLanguage, reload } = useSettings();
+  const { isPro } = usePurchases();
+  const router = useRouter();
 
   const handleReset = () => {
     showAlert(
@@ -38,6 +42,29 @@ export default function SettingsScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{t.settings.title}</Text>
+
+      {/* จุดเข้าถึงหน้า Paywall แบบถาวร ไม่ต้องรอชนโควตาฟรีก่อนถึงจะเห็นปุ่มนี้ */}
+      <Pressable
+        style={[styles.membershipCard, isPro && styles.membershipCardPro]}
+        onPress={() => router.push('/paywall')}
+      >
+        <View style={{ flex: 1 }}>
+          <Text style={styles.membershipTitle}>
+            {isPro ? t.subscription.alreadyPro : t.subscription.paywallTitle}
+          </Text>
+          <Text style={styles.membershipSubtitle}>
+            {isPro
+              ? t.subscription.paywallSubtitle
+              : t.subscription.featureLockedMessage}
+          </Text>
+        </View>
+
+        <Ionicons
+          name={isPro ? 'checkmark-circle' : 'chevron-forward'}
+          size={22}
+          color={isPro ? '#16A34A' : '#2563EB'}
+        />
+      </Pressable>
 
       <Text style={styles.sectionTitle}>{t.settings.language}</Text>
       <Text style={styles.sectionSubtitle}>{t.settings.languageSubtitle}</Text>
@@ -98,6 +125,28 @@ const styles = StyleSheet.create({
     color: '#6B7280',
     marginBottom: 4,
     textTransform: 'uppercase',
+  },
+  membershipCard: {
+    backgroundColor: '#EFF6FF',
+    borderRadius: 16,
+    padding: 18,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    marginBottom: 28,
+  },
+  membershipCardPro: {
+    backgroundColor: '#F0FDF4',
+  },
+  membershipTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#111827',
+  },
+  membershipSubtitle: {
+    fontSize: 13,
+    color: '#6B7280',
+    marginTop: 2,
   },
   sectionSubtitle: {
     fontSize: 13,

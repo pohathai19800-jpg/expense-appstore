@@ -3,9 +3,11 @@ import { FlatList, Text, View } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 
 import { useSettings } from '@/contexts/SettingsContext';
+import { usePurchases } from '@/contexts/PurchasesContext';
 import { FAB } from '@/components/common/FAB';
 import { SavingsGoalCard } from '@/components/savingsGoals/SavingsGoalCard';
 import { savingsGoalStyles } from '@/styles/savingsGoals';
+import { showAlert } from '@/utils/alert';
 
 import {
   getSavingsGoals,
@@ -13,8 +15,12 @@ import {
 } from '@/database/table/savingsGoals/queries';
 import type { SavingsGoal } from '@/types/savingsGoal';
 
+// จำนวนเป้าหมายการออมสูงสุดที่ผู้ใช้ฟรี (ยังไม่สมัคร Pro) สร้างได้
+const FREE_SAVINGS_GOAL_LIMIT = 1;
+
 export default function SavingsGoalsScreen() {
   const { t } = useSettings();
+  const { isPro } = usePurchases();
   const router = useRouter();
 
   const [goals, setGoals] = useState<SavingsGoal[]>([]);
@@ -46,6 +52,30 @@ export default function SavingsGoalsScreen() {
       load();
     }, [load])
   );
+
+  // ผู้ใช้ฟรีสร้างเป้าหมายการออมได้ไม่เกิน FREE_SAVINGS_GOAL_LIMIT รายการ
+  // ของเดิมที่มีอยู่แล้วดู/แก้ไข/ฝาก-ถอนได้ปกติ
+  const handleAddGoal = () => {
+    if (!isPro && goals.length >= FREE_SAVINGS_GOAL_LIMIT) {
+      showAlert(
+        t.subscription.itemLimitTitle,
+        t.subscription.itemLimitMessage.replace(
+          '{limit}',
+          String(FREE_SAVINGS_GOAL_LIMIT)
+        ),
+        [
+          { text: t.common.cancel, style: 'cancel' },
+          {
+            text: t.subscription.upgrade,
+            onPress: () => router.push('/paywall'),
+          },
+        ]
+      );
+      return;
+    }
+
+    router.push('/savings-goal-form');
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: '#F5F7FA' }}>
@@ -105,7 +135,7 @@ export default function SavingsGoalsScreen() {
         )}
       />
 
-      <FAB onPress={() => router.push('/savings-goal-form')} />
+      <FAB onPress={handleAddGoal} />
     </View>
   );
 }

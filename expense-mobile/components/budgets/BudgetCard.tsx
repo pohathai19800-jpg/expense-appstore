@@ -69,14 +69,17 @@ export function BudgetCard({ budget, onPress, onToggleShow }: BudgetCardProps) {
             )}`}
       </Text>
 
-      {onToggleShow ? (
-        <View style={budgetStyles.showToggleRow}>
-          <Text style={budgetStyles.showToggleLabel}>
-            {t.budget.showOnList}
-          </Text>
-          <Switch value={isShow} onValueChange={onToggleShow} />
-        </View>
-      ) : null}
+            {onToggleShow ? (
+              <Pressable
+                onPress={(e) => e.stopPropagation()}
+                style={budgetStyles.showToggleRow}
+              >
+                <Text style={budgetStyles.showToggleLabel}>
+                  {t.budget.showOnList}
+                </Text>
+                <Switch value={isShow} onValueChange={onToggleShow} />
+              </Pressable>
+            ) : null}
     </Pressable>
   );
 }

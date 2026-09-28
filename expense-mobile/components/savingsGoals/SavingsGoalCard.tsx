@@ -83,14 +83,17 @@ export function SavingsGoalCard({
         </View>
       ) : null}
 
-      {onToggleShow ? (
-        <View style={styles.showToggleRow}>
-          <Text style={styles.showToggleLabel}>
-            {t.savingsGoal.showOnList}
-          </Text>
-          <Switch value={isShow} onValueChange={onToggleShow} />
-        </View>
-      ) : null}
+            {onToggleShow ? (
+              <Pressable
+                onPress={(e) => e.stopPropagation()}
+                style={styles.showToggleRow}
+              >
+                <Text style={styles.showToggleLabel}>
+                  {t.savingsGoal.showOnList}
+                </Text>
+                <Switch value={isShow} onValueChange={onToggleShow} />
+              </Pressable>
+            ) : null}
     </Pressable>
   );
 }
